@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NostrHTTP for search engine indexing and access to Nostr data</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <div class="container">
+        <!-- 左侧导航栏 -->
+        <div class="sidebar">
+            <h2>导航栏</h2>
+            <ul>
+        	{% for item in relays %}
+		<li><a href="/relay/{{item}}">{{item}}</a></li>
+        	{% endfor %}
+            </ul>
+        </div>
+
+        <!-- 右侧内容区域 -->
+        <div class="content">
+    	 <ul>
+        	{% for item in data %}
+            		<li>{{ item.content }}</li>
+        	{% endfor %}
+    	 </ul>
+        </div>
+    </div>
+
+</body>
+</html>
