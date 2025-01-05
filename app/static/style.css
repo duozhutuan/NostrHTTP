@@ -74,3 +74,36 @@ body, html {
     color: #34495e;
     font-size: 18px;
 }
+
+.ulcontent {
+    list-style-type: none; /* 去掉默认的点 */
+    padding: 0; /* 去掉 ul 的默认内边距 */
+    margin: 0; /* 去掉 ul 的默认外边距 */
+}
+
+.ulcontent li {
+    border: 1px solid #ccc; /* 添加外框 */
+    padding: 10px; /* 内边距 */
+    margin: 5px 0; /* 上下外边距 */
+    border-radius: 5px; /* 圆角边框 */
+    background-color: #f9f9f9; /* 背景色 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 阴影效果 */
+}
+
+.button-container {
+    display: flex;
+    gap: 10px; /* 按钮之间的间距 */
+}
+
+.button-container a {
+    padding: 5px 10px; /* 按钮内边距 */
+    background-color: #cccccc; /* 按钮背景颜色 */
+    color: white; /* 按钮文字颜色 */
+    border: none; /* 去掉边框 */
+    border-radius: 5px; /* 圆角 */
+    cursor: pointer; /* 鼠标悬停时显示手型 */
+}
+
+.button-container a:hover {
+    background-color: #0056b3; /* 鼠标悬停时按钮背景颜色 */
+}

@@ -1,4 +1,5 @@
 from nostrclient.relay_pool import RelayPool
+from nostrclient import bech32
 from queue import Queue
 
 relayServer =  [ 
@@ -16,20 +17,37 @@ r = RelayPool(relays)
 r.connect(5)
 event_queue = Queue()
 
+def bech32encode(rawid):
+    converted_bits = bech32.convertbits(rawid, 8, 5)
+    return bech32.bech32_encode("note", converted_bits, bech32.Encoding.BECH32)
+
+def clear_queue():
+    while not event_queue.empty():
+        try:
+            event_queue.get_nowait()
+        except:
+            break
+
 def filter_event(event):
     resp = []
     count = 100
     if event['limit']:
         count = event['limit']
+
+    clear_queue()
     def handler_event(e):
+        bech32id = bech32encode(bytes.fromhex(e['id']))
+        e['bech32id'] = bech32id
         resp.append(e)
         if len(resp) >= count:
             event_queue.put("done")
         
     subs = r.subscribe(event)
     subs.on("EVENT",handler_event)
-    
-    event_queue.get(timeout=2)
+    try:
+        event_queue.get(timeout=10)
+    except:
+        pass
 
     subs.close()
     subs.off("EVENT",handler_event)

@@ -7,8 +7,12 @@ app = Flask(__name__,template_folder='templates', static_folder='static')
 
 @app.route("/")
 def index():
-    print(request.args)
     event = {"kinds":[1],"limit":100}
+    if request.args.get("until"):
+        try:
+            event["until"] = int(request.args.get("until"))
+        except:
+            pass
     resp = filter_event(event)
     context = {"relays":relays,"data":resp}
     return render_template('index.html', **context)
@@ -17,8 +21,12 @@ def index():
 @app.route("/relay/<path:url>")
 def relay(url):
     event = {"kinds":[1],"limit":100}
+    if request.args.get("until"):
+        try:
+            event["until"] = int(request.args.get("until"))
+        except:
+            pass
     resp = relay_event(url,event)
-    
     context = {"relays":relays,"data":resp}
     return render_template('index.html', **context)
 
