@@ -14,4 +14,5 @@ After installing the dependencies, start the Flask application with the followin
 flask --app app/app.py run
 ``` 
 
+<img src="https://raw.githubusercontent.com/duozhutuan/nostrhttp/master/docs/examples.png" alt="drawing" />
 
