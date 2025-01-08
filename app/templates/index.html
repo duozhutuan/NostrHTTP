@@ -12,6 +12,9 @@
         <!-- 左侧导航栏 -->
         <div class="sidebar">
             <h2>导航栏</h2>
+		    {% if Home %}
+            <h2><a href={{Home}}>Home</a></h2>
+		    {% endif %}
             <ul>
         	{% for item in relays %}
 		<li><a href="/relay/{{item}}">{{item}}</a></li>
@@ -36,6 +39,7 @@
 			<a href="https://yakihonne.com/notes/{{item.bech32id}}">yakihonne.com</a>
 			<a href="https://iris.to/{{item.bech32id}}">iris.to</a>
 			<a href="https://jumble.social/notes/{{item.bech32id}}">jumble.social</a>
+			<a href="/notes/{{item.bech32id}}">Me</a>
             		</div>
 
 		  </li>

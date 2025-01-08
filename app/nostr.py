@@ -4,6 +4,8 @@ from nostrclient import nip19
 from queue import Queue
 import socket
 
+from .config import hub
+
 socket.getaddrinfo = lambda *args: [(socket.AF_INET, socket.SOCK_STREAM, 6, '', (args[0], args[1]))]
 
 relayServer =  [ 
@@ -12,9 +14,6 @@ relayServer =  [
   'wss://nos.lol',
 ];
 
-#hub = "wss://bridge.duozhutuan.com/";
-#hub = "ws://localhost:8088/";
-hub = ""
 
 relays = [hub + relay for relay in relayServer]
 
@@ -24,7 +23,7 @@ event_queue = Queue()
 
 def bech32encode(rawid):
     converted_bits = bech32.convertbits(rawid, 8, 5)
-    return bech32.bech32_encode("note", converted_bits, bech32.Encoding.BECH32)
+    return bech32.bech32_encode("note", converted_bits)
 
 def clear_queue():
     while not event_queue.empty():
@@ -83,10 +82,13 @@ def nip19event(url,data):
         hrp, data  = bech32.bech32_decode(data)
         eventid = bytes(bech32.convertbits(data, 5, 8)[:-1]).hex()
         result = r1.fetchEvent({"ids":[eventid]})
-        result
+        bech32id = bech32encode(bytes.fromhex(result['id']))
+        result['bech32id'] = bech32id
     elif data.startswith("nevent1"):
         data = nip19.decode_bech32(data)
         result = r1.fetchEvent({"ids":[data['id']]})
+        bech32id = bech32encode(bytes.fromhex(result['id']))
+        result['bech32id'] = bech32id
         """
         author = r1.fetchEvent({
             "kinds": [0],

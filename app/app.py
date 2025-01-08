@@ -1,6 +1,7 @@
 from flask import Flask,request,render_template
 from .nostr import filter_event,relay_event,nip19event
 from .relays import relays
+from .config import Home
 
 app = Flask(__name__,template_folder='templates', static_folder='static')
 
@@ -14,7 +15,7 @@ def index():
         except:
             pass
     resp = filter_event(event)
-    context = {"relays":relays,"data":resp}
+    context = {"relays":relays,"data":resp,"Home":Home}
     return render_template('index.html', **context)
 
 
@@ -27,7 +28,7 @@ def relay(url):
         except:
             pass
     resp = relay_event(url,event)
-    context = {"relays":relays,"data":resp}
+    context = {"relays":relays,"data":resp,"Home":Home}
     return render_template('index.html', **context)
 
 @app.route("/notes/<data>")
@@ -37,7 +38,8 @@ def notes(data):
         url = request.args.get("r")
     
     resp = nip19event(url,data)
-    context = {"relays":relays,"data":resp}
+
+    context = {"relays":relays,"data":resp,"Home":Home}
     return render_template('index.html', **context)
 
 
