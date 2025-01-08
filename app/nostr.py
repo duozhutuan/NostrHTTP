@@ -1,5 +1,6 @@
 from nostrclient.relay_pool import RelayPool
 from nostrclient import bech32
+from nostrclient import nip19
 from queue import Queue
 
 relayServer =  [ 
@@ -63,3 +64,32 @@ def relay_event(url,event):
         r2.off("CLOSE",r2.reconnect)
     return resp
 
+def nip19event(url,data):
+    if url:
+        server = [url]
+        relays1 = [hub + relay for relay in server]
+        r1 = RelayPool(relays1)
+        r1.connect(2)
+    else:
+        r1 = r
+
+    result = None
+    if data.startswith("note1"):
+        hrp, data  = bech32.bech32_decode(data)
+        eventid = bytes(bech32.convertbits(data, 5, 8)[:-1]).hex()
+        result = r1.fetchEvent({"ids":[eventid]})
+        result
+    elif data.startswith("nevent1"):
+        data = nip19.decode_bech32(data)
+        result = r1.fetchEvent({"ids":[data['id']]})
+        """
+        author = r1.fetchEvent({
+            "kinds": [0],
+            "authors": [data['author']]})
+        """
+    else:
+        return []
+    if url:
+        r1.close()
+
+    return [result]
