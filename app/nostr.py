@@ -2,6 +2,9 @@ from nostrclient.relay_pool import RelayPool
 from nostrclient import bech32
 from nostrclient import nip19
 from queue import Queue
+import socket
+
+socket.getaddrinfo = lambda *args: [(socket.AF_INET, socket.SOCK_STREAM, 6, '', (args[0], args[1]))]
 
 relayServer =  [ 
   'wss://relay.damus.io',
@@ -9,8 +12,9 @@ relayServer =  [
   'wss://nos.lol',
 ];
 
-hub = "wss://bridge.duozhutuan.com/";
+#hub = "wss://bridge.duozhutuan.com/";
 #hub = "ws://localhost:8088/";
+hub = ""
 
 relays = [hub + relay for relay in relayServer]
 
@@ -62,6 +66,7 @@ def relay_event(url,event):
     resp = filter_event(event)
     for r2 in r1.RelayList:
         r2.off("CLOSE",r2.reconnect)
+    r1 = None
     return resp
 
 def nip19event(url,data):
