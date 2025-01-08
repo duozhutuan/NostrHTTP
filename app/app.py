@@ -1,4 +1,4 @@
-from flask import Flask,request,render_template
+from flask import Flask,request,render_template,send_from_directory
 from .nostr import filter_event,relay_event,nip19event
 from .relays import relays
 from .config import Home
@@ -18,6 +18,9 @@ def index():
     context = {"relays":relays,"data":resp,"Home":Home}
     return render_template('index.html', **context)
 
+@app.route('/robots.txt')
+def robots():
+    return send_from_directory(app.static_folder, 'robots.txt')
 
 @app.route("/relay/<path:url>")
 def relay(url):
