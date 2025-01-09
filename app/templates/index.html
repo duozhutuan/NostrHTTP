@@ -30,7 +30,9 @@
 		     <a href="?until={{data[-1].created_at}}&kind={{kind}}">next</a>
 		     {% endif %}
 		     
+		     {% if notes != 1 %}
             <a href="?kind=30023&until={{until}}">Articles</a>
+		     {% endif %}
             </div>
 	
     	  <ul class="ulcontent">

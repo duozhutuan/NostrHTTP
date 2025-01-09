@@ -63,7 +63,7 @@ def notes(data):
     
     resp = nip19event(url,data)
 
-    context = {"relays":relays,"data":resp,"Home":Home}
+    context = {"relays":relays,"data":resp,"Home":Home,"notes":1}
     return render_template('index.html', **context)
 
 
