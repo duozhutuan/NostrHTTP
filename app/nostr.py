@@ -4,18 +4,11 @@ from nostrclient import nip19
 from queue import Queue
 import socket
 
-from .config import hub
+from .config import bridge, relayServer
 
 socket.getaddrinfo = lambda *args: [(socket.AF_INET, socket.SOCK_STREAM, 6, '', (args[0], args[1]))]
 
-relayServer =  [ 
-  'wss://relay.damus.io',
-  'wss://strfry.iris.to',
-  'wss://nos.lol',
-];
-
-
-relays = [hub + relay for relay in relayServer]
+relays = [bridge + relay for relay in relayServer]
 
 r = RelayPool(relays)
 r.connect(5)
@@ -59,7 +52,7 @@ def filter_event(event):
 
 def relay_event(url,event):
     server = [url]
-    relays1 = [hub + relay for relay in server]
+    relays1 = [bridge + relay for relay in server]
     r1 = RelayPool(relays1)
     r1.connect(2)
     resp = filter_event(event)
@@ -71,7 +64,7 @@ def relay_event(url,event):
 def nip19event(url,data):
     if url:
         server = [url]
-        relays1 = [hub + relay for relay in server]
+        relays1 = [bridge + relay for relay in server]
         r1 = RelayPool(relays1)
         r1.connect(2)
     else:
