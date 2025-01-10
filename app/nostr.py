@@ -25,7 +25,7 @@ def clear_queue():
         except:
             break
 
-def filter_event(event):
+def filter_event(event,r2=r):
     resp = []
     count = 100
     if event['limit']:
@@ -39,7 +39,7 @@ def filter_event(event):
         if len(resp) >= count:
             event_queue.put("done")
         
-    subs = r.subscribe(event)
+    subs = r2.subscribe(event)
     subs.on("EVENT",handler_event)
     try:
         event_queue.get(timeout=10)
@@ -55,7 +55,7 @@ def relay_event(url,event):
     relays1 = [bridge + relay for relay in server]
     r1 = RelayPool(relays1)
     r1.connect(2)
-    resp = filter_event(event)
+    resp = filter_event(event,r1)
     for r2 in r1.RelayList:
         r2.off("CLOSE",r2.reconnect)
     r1 = None
