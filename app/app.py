@@ -6,14 +6,18 @@ import time
 
 app = Flask(__name__,template_folder='templates', static_folder='static')
 
-def safe_int(args,default = 0):
-    if args is None:
-        return default
-    try:
-        return int(args)
-    except:
-        return default
+def get_filter(event,until=None,since=None):
+    time_filter = {}
+    if until:
+        event['until'] = until
+        time_filter['type'] = "until"
+        time_filter['val']  =  until
+    if since:
+        event['since'] = since
+        time_filter['type'] = "since"
+        time_filter['val']  =  since
 
+    return time_filter
 
 @app.route("/")
 def index():
@@ -21,16 +25,19 @@ def index():
     until = int(time.time())    
     event = {"limit":100}
 
-    ret = safe_int(request.args.get("kind"),kind)
-    kind = ret
+    ret = request.args.get("kind",type=int)
+    if ret:
+        kind = ret
+
     event["kinds"] = [kind]
 
-    ret = safe_int(request.args.get("until"),until)
-    until = ret
-    event['until'] = until
+    time_filter = {}
+    until = request.args.get("until",type=int)
+    since = request.args.get("since",type=int)
+    time_filter = get_filter(event,until,since)
 
     resp = filter_event(event)
-    context = {"relays":relays,"data":resp,"Home":Home,"kind":kind,"until":until}
+    context = {"relays":relays,"data":resp,"Home":Home,"kind":kind,"time_filter":time_filter}
     return render_template('index.html', **context)
 
 @app.route('/robots.txt')
@@ -43,16 +50,20 @@ def relay(url):
     until = int(time.time())    
     event = {"limit":100}
 
-    ret = safe_int(request.args.get("kind"),kind)
-    kind = ret
+    ret = request.args.get("kind",type=int)
+    if ret:
+        kind = ret
+
     event["kinds"] = [kind]
 
-    ret = safe_int(request.args.get("until"),until)
-    until = ret
-    event['until'] = until
+    time_filter = {}
+    until = request.args.get("until",type=int)
+    since = request.args.get("since",type=int)
+    time_filter = get_filter(event,until,since)
+
  
     resp = relay_event(url,event)
-    context = {"relays":relays,"data":resp,"Home":Home,"kind":kind,"until":until}
+    context = {"relays":relays,"data":resp,"Home":Home,"kind":kind,"time_filter":time_filter}
     return render_template('index.html', **context)
 
 @app.route("/notes/<data>")

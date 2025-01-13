@@ -26,12 +26,12 @@
         <div class="content">
 	       <div class="button-container">
 		     {% if data|length > 2 %}
-		     <a href="?until={{data[0].created_at}}&kind={{kind}}">prev</a>
+		     <a href="?since={{data[0].created_at}}&kind={{kind}}">prev</a>
 		     <a href="?until={{data[-1].created_at}}&kind={{kind}}">next</a>
 		     {% endif %}
 		     
 		     {% if notes != 1 %}
-            <a href="?kind=30023&until={{until}}">Articles</a>
+            <a href="?kind=30023&{{time_filter.type}}={{time_filter.val}}">Articles</a>
 		     {% endif %}
             </div>
 	
