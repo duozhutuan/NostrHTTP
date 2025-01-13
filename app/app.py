@@ -7,7 +7,7 @@ import time
 app = Flask(__name__,template_folder='templates', static_folder='static')
 
 def get_filter(event,until=None,since=None):
-    time_filter = {}
+    time_filter = {'type':None,"val":None}
     if until:
         event['until'] = until
         time_filter['type'] = "until"

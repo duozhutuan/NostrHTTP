@@ -31,7 +31,11 @@
 		     {% endif %}
 		     
 		     {% if notes != 1 %}
-            <a href="?kind=30023&{{time_filter.type}}={{time_filter.val}}">Articles</a>
+               {% if time_filter.type is none%}
+                <a href="?kind=30023">Articles</a>
+               {% else %}
+                <a href="?kind=30023&{{time_filter.type}}={{time_filter.val}}">Articles</a>
+		       {% endif %}
 		     {% endif %}
             </div>
 	
