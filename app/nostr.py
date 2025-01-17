@@ -2,9 +2,10 @@ from nostrclient.relay_pool import RelayPool
 from nostrclient import bech32
 from nostrclient import nip19
 from queue import Queue
+from datetime import datetime
+from .config import bridge, relayServer,searchServer
 import socket
 import threading
-from .config import bridge, relayServer,searchServer
 
 #1. set ipv4
 socket.getaddrinfo = lambda *args: [(socket.AF_INET, socket.SOCK_STREAM, 6, '', (args[0], args[1]))]
@@ -26,6 +27,8 @@ def bech32encode(rawid):
     converted_bits = bech32.convertbits(rawid, 8, 5)
     return bech32.bech32_encode("note", converted_bits)
 
+def bech32encode_nevent(rawid,author):
+    return nip19.encode_bech32("nevent",{"author":author,"id":rawid})
 def clear_queue():
     while not event_queue.empty():
         try:
@@ -42,7 +45,9 @@ def filter_event(event,r2=r):
     clear_queue()
     def handler_event(e):
         bech32id = bech32encode(bytes.fromhex(e['id']))
+        e['created_at'] = datetime.fromtimestamp(e['created_at']).strftime("%Y-%m-%d %H:%M:%S")
         e['bech32id'] = bech32id
+        e['neventid'] = bech32encode_nevent(e['id'],e['pubkey'])
         resp.append(e)
         if len(resp) >= count:
             event_queue.put("done")
@@ -83,12 +88,18 @@ def nip19event(url,data):
         hrp, data  = bech32.bech32_decode(data)
         eventid = bytes(bech32.convertbits(data, 5, 8)[:-1]).hex()
         result = r1.fetchEvent({"ids":[eventid]})
+        e = result
         bech32id = bech32encode(bytes.fromhex(result['id']))
+        result['created_at'] = datetime.fromtimestamp(e['created_at']).strftime("%Y-%m-%d %H:%M:%S")
+        result['neventid'] = bech32encode_nevent(e['id'],e['pubkey'])
         result['bech32id'] = bech32id
     elif data.startswith("nevent1"):
         data = nip19.decode_bech32(data)
         result = r1.fetchEvent({"ids":[data['id']]})
+        e = result
         bech32id = bech32encode(bytes.fromhex(result['id']))
+        result['created_at'] = datetime.fromtimestamp(result['created_at']).strftime("%Y-%m-%d %H:%M:%S")
+        result['neventid'] = bech32encode_nevent(e['id'],e['pubkey'])
         result['bech32id'] = bech32id
         """
         author = r1.fetchEvent({
@@ -110,7 +121,9 @@ def search_event(keyword):
 
     def handler_event(e):
         bech32id = bech32encode(bytes.fromhex(e['id']))
+        e['created_at'] = datetime.fromtimestamp(e['created_at']).strftime("%Y-%m-%d %H:%M:%S")
         e['bech32id'] = bech32id
+        e['neventid'] = bech32encode_nevent(e['id'],e['pubkey'])
         resp.append(e)
         if len(resp) >= count:
             with condition:

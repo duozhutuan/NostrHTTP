@@ -19,7 +19,6 @@ body, html {
 /* 左侧导航栏 */
 .sidebar {
     width: 250px; /* 固定侧边栏宽度 */
-    background-color: #f2f2ed; /* 侧边栏背景颜色 */
     color: black;
     padding: 20px;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
@@ -88,6 +87,8 @@ body, html {
     border-radius: 5px; /* 圆角边框 */
     background-color: #f9f9f9; /* 背景色 */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 阴影效果 */
+    word-wrap: break-word; /* 允许长单词和链接换行 */
+    word-break: break-all; /* 强制换行 */
 }
 
 .button-container {
@@ -134,3 +135,13 @@ body, html {
             background-color: #0056b3;
         }
 
+.ulcontent li .time {
+    font-size: 14px;
+    color: #333;
+    padding: 5px 10px;
+    border-radius: 5px;
+    align-items: flex-start;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NostrHTTP for search engine indexing and access to Nostr data</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.min.css') }}">
 </head>
 <body>
 
@@ -56,12 +57,13 @@
     	  <ul class="ulcontent">
         	{% for item in data %}
                    <li>
-			<div>{{ item.content }}</div>
+                    <div class="time">{{item.created_at}}</div>
+			        <div>{{ item.content }}</div>
             		<div class="button-container">
-			<a href="https://yakihonne.com/notes/{{item.bech32id}}">yakihonne.com</a>
-			<a href="https://iris.to/{{item.bech32id}}">iris.to</a>
-			<a href="https://jumble.social/notes/{{item.bech32id}}">jumble.social</a>
-			<a href="/notes/{{item.bech32id}}">Me</a>
+			<a href="https://yakihonne.com/notes/{{item.neventid}}">yakihonne.com</a>
+			<a href="https://iris.to/{{item.neventid}}">iris.to</a>
+			<a href="https://jumble.social/notes/{{item.neventid}}">jumble.social</a>
+			<a href="/notes/{{item.neventid}}">Me</a>
             		</div>
 
 		  </li>
