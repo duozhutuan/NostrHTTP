@@ -4,5 +4,11 @@ relayServer =  [
   'wss://nos.lol',
 ];
 
+searchServer = [
+  "wss://search.nos.today/",
+  "wss://relay.nostr.band/",
+
+]
+
 bridge = ""
 Home   = None 

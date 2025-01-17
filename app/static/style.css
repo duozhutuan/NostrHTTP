@@ -107,3 +107,30 @@ body, html {
 .button-container a:hover {
     background-color: #0056b3; /* 鼠标悬停时按钮背景颜色 */
 }
+
+        /* 搜索框样式 */
+        .search-container {
+            align-items: center;
+            margin: 20px auto;
+        }
+        .search-input {
+            flex: 1;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px 0 0 4px;
+            outline: none;
+        }
+        .search-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+        }
+        .search-button:hover {
+            background-color: #0056b3;
+        }
+

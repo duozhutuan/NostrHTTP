@@ -3,15 +3,23 @@ from nostrclient import bech32
 from nostrclient import nip19
 from queue import Queue
 import socket
+import threading
+from .config import bridge, relayServer,searchServer
 
-from .config import bridge, relayServer
-
+#1. set ipv4
 socket.getaddrinfo = lambda *args: [(socket.AF_INET, socket.SOCK_STREAM, 6, '', (args[0], args[1]))]
 
+#2. relay server config
 relays = [bridge + relay for relay in relayServer]
+search_relays = [bridge + relay for relay in searchServer]
 
 r = RelayPool(relays)
 r.connect(5)
+
+rs = RelayPool(search_relays)
+rs.connect(0)
+
+#3. wait ...
 event_queue = Queue()
 
 def bech32encode(rawid):
@@ -93,3 +101,25 @@ def nip19event(url,data):
         r1.close()
 
     return [result]
+
+def search_event(keyword):
+    filters    = {"kinds":[1,30023],"limit":100,"search":keyword}
+    resp = []
+    count = 100
+    condition = threading.Condition()
+
+    def handler_event(e):
+        bech32id = bech32encode(bytes.fromhex(e['id']))
+        e['bech32id'] = bech32id
+        resp.append(e)
+        if len(resp) >= count:
+            with condition:
+                condition.notify()
+                            
+
+    subs = rs.subscribe(filters)
+    subs.on("EVENT",handler_event)
+    with condition:
+           condition.wait(timeout=5)
+    return resp
+

@@ -1,5 +1,5 @@
 from flask import Flask,request,render_template,send_from_directory
-from .nostr import filter_event,relay_event,nip19event
+from .nostr import filter_event,relay_event,nip19event,search_event
 from .relays import relays
 from .config import Home
 import time
@@ -78,3 +78,10 @@ def notes(data):
     return render_template('index.html', **context)
 
 
+@app.route("/search")
+def search():
+    keyword = request.args.get("q")
+    resp = search_event (keyword)
+    
+    context = {"relays":relays,"data":resp,"Home":Home}
+    return render_template('index.html', **context)

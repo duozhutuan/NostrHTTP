@@ -24,6 +24,20 @@
 
         <!-- 右侧内容区域 -->
         <div class="content">
+    
+               <div class="search-container">
+                <!-- 搜索输入框 -->
+                <input
+                  type="text"
+                  id="searchInput"
+                  class="search-input"
+                  placeholder="请输入关键词..."
+                  onkeydown="handleKeyDown(event)"
+                 />
+                <!-- 搜索按钮 -->
+                <button class="search-button" onclick="handleSearch()">搜索</button>
+           </div>
+
 	       <div class="button-container">
 		     {% if data|length > 2 %}
 		     <a href="?since={{data[0].created_at}}&kind={{kind}}">prev</a>
@@ -31,10 +45,10 @@
 		     {% endif %}
 		     
 		     {% if notes != 1 %}
-               {% if time_filter.type is none%}
-                <a href="?kind=30023">Articles</a>
-               {% else %}
+               {% if time_filter and time_filter.type is not none%}
                 <a href="?kind=30023&{{time_filter.type}}={{time_filter.val}}">Articles</a>
+               {% else %}
+                <a href="?kind=30023">Articles</a>
 		       {% endif %}
 		     {% endif %}
             </div>
@@ -55,6 +69,24 @@
     	 </ul>
         </div>
     </div>
+    <script>
+        // 处理回车键
+        function handleKeyDown(event) {
+            if (event.key === 'Enter') {
+                handleSearch();
+            }
+        }
+
+        // 处理搜索
+        function handleSearch() {
+            const keyword = document.getElementById('searchInput').value.trim();
+            if (keyword) {
+                window.location.href = `/search?q=${encodeURIComponent(keyword)}`;
+            } else {
+                alert('请输入搜索关键词！');
+            }
+        }
+    </script>
 
 </body>
 </html>
