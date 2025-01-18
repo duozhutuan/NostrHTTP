@@ -64,7 +64,9 @@
 			<a href="https://yakihonne.com/notes/{{item.neventid}}">yakihonne.com</a>
 			<a href="https://iris.to/{{item.neventid}}">iris.to</a>
 			<a href="https://jumble.social/notes/{{item.neventid}}">jumble.social</a>
+            {% if notes != 1 %}
 			<a href="/notes/{{item.neventid}}{{url}}">Me</a>
+            {% endif %}
             		</div>
 
 		  </li>
