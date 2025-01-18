@@ -71,9 +71,11 @@ def notes(data):
     url = None
     if request.args.get("r"):
         url = request.args.get("r")
-    
-    resp = nip19event(url,data)
-
+    try:
+        resp = nip19event(url,data)
+    except:
+        resp = []
+        
     context = {"relays":relays,"data":resp,"Home":Home,"notes":1}
     return render_template('index.html', **context)
 
