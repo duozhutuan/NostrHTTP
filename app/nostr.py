@@ -79,7 +79,7 @@ def nip19event(url,data):
         server = [url]
         relays1 = [bridge + relay for relay in server]
         r1 = RelayPool(relays1)
-        r1.connect(2)
+        r1.connect(5)
     else:
         r1 = r
 

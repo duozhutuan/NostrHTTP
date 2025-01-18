@@ -63,7 +63,7 @@ def relay(url):
 
  
     resp = relay_event(url,event)
-    context = {"relays":relays,"data":resp,"Home":Home,"kind":kind,"time_filter":time_filter}
+    context = {"relays":relays,"data":resp,"Home":Home,"kind":kind,"time_filter":time_filter,"url":f"?r={url}"}
     return render_template('index.html', **context)
 
 @app.route("/notes/<data>")
