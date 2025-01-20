@@ -40,17 +40,17 @@
                 <button class="search-button" onclick="handleSearch()">搜索</button>
            </div>
 
-	       <div class="button-container">
+	       <div class="">
 		     {% if data|length > 2 %}
-		     <a href="?since={{data[0].created_at}}&kind={{kind}}">prev</a>
-		     <a href="?until={{data[-1].created_at}}&kind={{kind}}">next</a>
+		     <a href="?since={{data[0].created_at}}&kind={{kind}}" class="btn btn-outline-primary btn-sm">prev</a>
+		     <a href="?until={{data[-1].created_at}}&kind={{kind}}"class="btn btn-outline-primary btn-sm">next</a>
 		     {% endif %}
 		     
 		     {% if notes != 1 %}
                {% if time_filter and time_filter.type is not none%}
-                <a href="?kind=30023&{{time_filter.type}}={{time_filter.val}}">Articles</a>
+                <a href="?kind=30023&{{time_filter.type}}={{time_filter.val}}" class="btn btn-outline-primary btn-sm" >Articles</a>
                {% else %}
-                <a href="?kind=30023">Articles</a>
+                <a href="?kind=30023" class="btn btn-outline-primary btn-sm">Articles</a>
 		       {% endif %}
 		     {% endif %}
             </div>
@@ -60,12 +60,12 @@
                    <li>
                     <div class="time">{{item.created_at}}</div>
 			        <div>{{ item.content }}</div>
-            		<div class="button-container">
-			<a href="https://yakihonne.com/notes/{{item.neventid}}">yakihonne.com</a>
-			<a href="https://iris.to/{{item.neventid}}">iris.to</a>
-			<a href="https://jumble.social/notes/{{item.neventid}}">jumble.social</a>
+            		<div class="linkgroup">
+			<a href="https://yakihonne.com/notes/{{item.neventid}}" class="btn btn-outline-primary btn-sm">yakihonne.com</a>
+			<a href="https://iris.to/{{item.neventid}}" class="btn btn-outline-primary btn-sm">iris.to</a>
+			<a href="https://jumble.social/notes/{{item.neventid}}" class="btn btn-outline-primary btn-sm">jumble.social</a>
             {% if notes != 1 %}
-			<a href="/notes/{{item.neventid}}{{url}}">Me</a>
+			<a href="/notes/{{item.neventid}}{{url}}" class="btn btn-outline-primary btn-sm">Me</a>
             {% endif %}
             		</div>
 
