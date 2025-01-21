@@ -1,6 +1,7 @@
 from nostrclient.relay_pool import RelayPool
 from nostrclient import bech32
 from nostrclient import nip19
+from nostrclient.user import User
 from queue import Queue
 from datetime import datetime
 from .config import bridge, relayServer,searchServer
@@ -88,19 +89,26 @@ def nip19event(url,data):
         hrp, data  = bech32.bech32_decode(data)
         eventid = bytes(bech32.convertbits(data, 5, 8)[:-1]).hex()
         result = r1.fetchEvent({"ids":[eventid]})
+        user = User(result['pubkey'],r1)
+        profile = user.fetchProfile()
+
         e = result
         bech32id = bech32encode(bytes.fromhex(result['id']))
         result['created_at'] = datetime.fromtimestamp(e['created_at']).strftime("%Y-%m-%d %H:%M:%S")
-        result['neventid'] = bech32encode_nevent(e['id'],e['pubkey'])
-        result['bech32id'] = bech32id
+        result['neventid']   = bech32encode_nevent(e['id'],e['pubkey'])
+        result['bech32id']   = bech32id
+        result['author']     = profile.to_dict()
     elif data.startswith("nevent1"):
         data = nip19.decode_bech32(data)
         result = r1.fetchEvent({"ids":[data['id']]})
         e = result
+        user = User(result['pubkey'],r1)
+        profile = user.fetchProfile()
         bech32id = bech32encode(bytes.fromhex(result['id']))
         result['created_at'] = datetime.fromtimestamp(result['created_at']).strftime("%Y-%m-%d %H:%M:%S")
-        result['neventid'] = bech32encode_nevent(e['id'],e['pubkey'])
-        result['bech32id'] = bech32id
+        result['neventid']   = bech32encode_nevent(e['id'],e['pubkey'])
+        result['bech32id']   = bech32id
+        result['author']     = profile.to_dict()
         """
         author = r1.fetchEvent({
             "kinds": [0],

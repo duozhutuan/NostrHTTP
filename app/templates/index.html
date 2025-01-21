@@ -58,15 +58,25 @@
     	  <ul class="ulcontent">
         	{% for item in data %}
                    <li>
-                    <div class="time">{{item.created_at}}</div>
+                    <div style="display: flex; align-items: center; margin-bottom:5px;">
+                       {% if item.author and item.author.display_name %}
+                        <img src="{{item.author.picture if item.author.picture else url_for('static', filename='nostr-icon-purple-64x64.png')}}" 
+                            alt="" class="rounded-circle" width="32" height="32"> @ {{item.author.display_name}}
+                       {% else %}
+                        <img src="{{ url_for('static', filename='nostr-icon-purple-64x64.png') }}"  class="rounded-circle" width="32" height="32"> @ {{item.pubkey[:8]}}:{{item.pubkey[-8:]}}
+                       {% endif %}
+
+                     <div class="time"  style="margin-left: auto;">{{item.created_at}}</div>
+                    </div>
 			        <div>{{ item.content }}</div>
+
             		<div class="linkgroup">
-			<a href="https://yakihonne.com/notes/{{item.neventid}}" class="btn btn-outline-primary btn-sm">yakihonne.com</a>
-			<a href="https://iris.to/{{item.neventid}}" class="btn btn-outline-primary btn-sm">iris.to</a>
-			<a href="https://jumble.social/notes/{{item.neventid}}" class="btn btn-outline-primary btn-sm">jumble.social</a>
-            {% if notes != 1 %}
-			<a href="/notes/{{item.neventid}}{{url}}" class="btn btn-outline-primary btn-sm">Me</a>
-            {% endif %}
+        			<a href="https://yakihonne.com/notes/{{item.neventid}}" class="btn btn-outline-primary btn-sm">yakihonne.com</a>
+		        	<a href="https://iris.to/{{item.neventid}}" class="btn btn-outline-primary btn-sm">iris.to</a>
+			        <a href="https://jumble.social/notes/{{item.neventid}}" class="btn btn-outline-primary btn-sm">jumble.social</a>
+                    {% if notes != 1 %}
+			            <a href="/notes/{{item.neventid}}{{url}}" class="btn btn-outline-primary btn-sm">Me</a>
+                    {% endif %}
             		</div>
 
 		  </li>
