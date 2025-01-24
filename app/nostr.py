@@ -46,7 +46,7 @@ def filter_event(event,r2=r):
     clear_queue()
     def handler_event(e):
         bech32id = bech32encode(bytes.fromhex(e['id']))
-        e['created_at'] = datetime.fromtimestamp(e['created_at']).strftime("%Y-%m-%d %H:%M:%S")
+        e['created_at_d'] = datetime.fromtimestamp(e['created_at']).strftime("%Y-%m-%d %H:%M:%S")
         e['bech32id'] = bech32id
         e['neventid'] = bech32encode_nevent(e['id'],e['pubkey'])
         resp.append(e)
@@ -98,7 +98,7 @@ def nip19event(url,data):
 
         e = result
         bech32id = bech32encode(bytes.fromhex(result['id']))
-        result['created_at'] = datetime.fromtimestamp(e['created_at']).strftime("%Y-%m-%d %H:%M:%S")
+        result['created_at_d'] = datetime.fromtimestamp(e['created_at']).strftime("%Y-%m-%d %H:%M:%S")
         result['neventid']   = bech32encode_nevent(e['id'],e['pubkey'])
         result['bech32id']   = bech32id
         result['author']     = profile.to_dict()
@@ -109,7 +109,7 @@ def nip19event(url,data):
         user = User(result['pubkey'],r)
         profile = user.fetchProfile()
         bech32id = bech32encode(bytes.fromhex(result['id']))
-        result['created_at'] = datetime.fromtimestamp(result['created_at']).strftime("%Y-%m-%d %H:%M:%S")
+        result['created_at_d'] = datetime.fromtimestamp(result['created_at']).strftime("%Y-%m-%d %H:%M:%S")
         result['neventid']   = bech32encode_nevent(e['id'],e['pubkey'])
         result['bech32id']   = bech32id
         result['author']     = profile.to_dict()
@@ -133,7 +133,7 @@ def search_event(keyword):
 
     def handler_event(e):
         bech32id = bech32encode(bytes.fromhex(e['id']))
-        e['created_at'] = datetime.fromtimestamp(e['created_at']).strftime("%Y-%m-%d %H:%M:%S")
+        e['created_at_d'] = datetime.fromtimestamp(e['created_at']).strftime("%Y-%m-%d %H:%M:%S")
         e['bech32id'] = bech32id
         e['neventid'] = bech32encode_nevent(e['id'],e['pubkey'])
         resp.append(e)
