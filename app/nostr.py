@@ -76,6 +76,7 @@ def relay_event(url,event):
     return resp
 
 def nip19event(url,data):
+    """
     if url:
         server = [url]
         relays1 = [bridge + relay for relay in server]
@@ -83,12 +84,15 @@ def nip19event(url,data):
         r1.connect(5)
     else:
         r1 = r
+    """
+    if url:
+        r.add_relay(bridge+url)
 
     result = None
     if data.startswith("note1"):
         hrp, data  = bech32.bech32_decode(data)
         eventid = bytes(bech32.convertbits(data, 5, 8)[:-1]).hex()
-        result = r1.fetchEvent({"ids":[eventid]})
+        result = r.fetchEvent({"ids":[eventid]})
         user = User(result['pubkey'],r1)
         profile = user.fetchProfile()
 
@@ -100,9 +104,9 @@ def nip19event(url,data):
         result['author']     = profile.to_dict()
     elif data.startswith("nevent1"):
         data = nip19.decode_bech32(data)
-        result = r1.fetchEvent({"ids":[data['id']]})
+        result = r.fetchEvent({"ids":[data['id']]})
         e = result
-        user = User(result['pubkey'],r1)
+        user = User(result['pubkey'],r)
         profile = user.fetchProfile()
         bech32id = bech32encode(bytes.fromhex(result['id']))
         result['created_at'] = datetime.fromtimestamp(result['created_at']).strftime("%Y-%m-%d %H:%M:%S")
@@ -117,7 +121,7 @@ def nip19event(url,data):
     else:
         return []
     if url:
-        r1.close()
+        r.del_relay(bridge+url)
 
     return [result]
 
