@@ -7,6 +7,8 @@ from datetime import datetime
 from .config import bridge, relayServer,searchServer
 import socket
 import threading
+import markdown
+ 
 
 #1. set ipv4
 socket.getaddrinfo = lambda *args: [(socket.AF_INET, socket.SOCK_STREAM, 6, '', (args[0], args[1]))]
@@ -49,6 +51,8 @@ def filter_event(event,r2=r):
         e['created_at_d'] = datetime.fromtimestamp(e['created_at']).strftime("%Y-%m-%d %H:%M:%S")
         e['bech32id'] = bech32id
         e['neventid'] = bech32encode_nevent(e['id'],e['pubkey'])
+        if e['kind'] == 30023 :
+            e['content'] =  markdown.markdown(e['content'])
         resp.append(e)
         if len(resp) >= count:
             event_queue.put("done")
@@ -112,6 +116,8 @@ def nip19event(url,data):
         result['created_at_d'] = datetime.fromtimestamp(result['created_at']).strftime("%Y-%m-%d %H:%M:%S")
         result['neventid']   = bech32encode_nevent(e['id'],e['pubkey'])
         result['bech32id']   = bech32id
+        if e['kind'] == 30023 :
+            result['content'] =  markdown.markdown(e['content'])
         result['author']     = profile.to_dict()
         """
         author = r1.fetchEvent({

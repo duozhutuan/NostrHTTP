@@ -76,7 +76,10 @@
 
                      <div class="time"  style="margin-left: auto;">{{item.created_at_d}}</div>
                     </div>
-			        <div>{{ item.content }}</div>
+			        <div>{% autoescape false %}
+                        {{ item.content}}
+                        {% endautoescape %}
+                    </div>
 
             		<div class="linkgroup">
         			<a href="https://yakihonne.com/notes/{{item.neventid}}" class="btn btn-outline-primary btn-sm">yakihonne.com</a>
